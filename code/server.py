@@ -23,7 +23,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         self.space_to_players = {}
         for i in range(0, game_constants.GRID_SIZE):
             for j in range(0, game_constants.GRID_SIZE):
-                self.spaces[(i, j)] = []
+                self.space_to_players[(i, j)] = []
 
     def join(self, name, context):
         # Get correct emoji for trainer or pokemon
