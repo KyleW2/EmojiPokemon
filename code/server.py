@@ -34,6 +34,9 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             print("stranger danger")
             game_constants.gracefull_stop()
 
+        # Insert into players dictionary
+        self.players[name.name] = emoji
+
         # Spawn player on board
         print("spawning player")
         self.spawnPlayer(name.name)
@@ -41,8 +44,6 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         print("printing board")
         self.printBoard()
 
-        # Insert into players dictionary
-        self.players[name.name] = emoji
         return pokemon_pb2.Emoji(emoji = emoji)
     
     # Calls itself until a free space is found for player
