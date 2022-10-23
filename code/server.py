@@ -66,7 +66,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
                     print(" ", end = "")
                 # If occupied print players emoji
                 else:
-                    print(self.players[self.space_to_players[(i, j)]], end = "")
+                    print(self.players[self.space_to_players[(i, j)][0]], end = "")
             print()
 
 def start():
