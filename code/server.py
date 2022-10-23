@@ -9,11 +9,13 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # A dictionary mapping player names to their emoji
         self.players = {}
 
-        # Shuffle the emoji list so i dont get bored of the same 3 emojis
-        self.available_trainers = random.shuffle([e for e in game_constants.TRAINER_EMOJIS])
-        self.available_pokemon = random.shuffle([e for e in game_constants.POKEMON_EMOJIS])
+        
+        self.available_trainers = game_constants.TRAINER_EMOJIS
+        self.available_pokemon = game_constants.POKEMON_EMOJIS
 
-        print(self.available_pokemon)
+        # Shuffle the emoji list so i dont get bored of the same 3 emojis
+        random.shuffle(self.available_trainers)
+        random.shuffle(self.available_pokemon)
 
     def join(self, name, context):
         # Get correct emoji for trainer or pokemon
