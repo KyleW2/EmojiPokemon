@@ -7,9 +7,10 @@ def start(name):
     try:
         with grpc.insecure_channel(f"server:{game_constants.PORT}") as channel:
             stub = pokemon_pb2_grpc.PokemonStub(channel)
+            print("made it")
             response = stub.join(pokemon_pb2.Name(name = name))
 
-            print("I am {response}!")
+            print(f"I am {response.emoji}!")
 
             game_constants.gracefull_stop()
 
