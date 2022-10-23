@@ -13,6 +13,8 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         self.available_trainers = random.shuffle(game_constants.TRAINER_EMOJIS)
         self.available_pokemon = random.shuffle(game_constants.POKEMON_EMOJIS)
 
+        print(self.available_pokemon)
+
     def join(self, name, context):
         # Get correct emoji for trainer or pokemon
         if "trainer" in name.name:
