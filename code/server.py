@@ -35,8 +35,10 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             game_constants.gracefull_stop()
 
         # Spawn player on board
+        print("spawning player")
         self.spawnPlayer(name.name)
         
+        print("printing board")
         self.printBoard()
 
         # Insert into players dictionary
@@ -63,7 +65,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
                     print(" ", end = "")
                 # If occupied print players emoji
                 else:
-                    print(self.players[self.space_to_players[(i, j)]])
+                    print(self.players[self.space_to_players[(i, j)]], end = "")
             print()
 
 def start():
