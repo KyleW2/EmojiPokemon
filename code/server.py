@@ -10,8 +10,8 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         self.players = {}
 
         # Shuffle the emoji list so i dont get bored of the same 3 emojis
-        self.available_trainers = random.shuffle(game_constants.TRAINER_EMOJIS)
-        self.available_pokemon = random.shuffle(game_constants.POKEMON_EMOJIS)
+        self.available_trainers = random.shuffle([e for e in game_constants.TRAINER_EMOJIS])
+        self.available_pokemon = random.shuffle([e for e in game_constants.POKEMON_EMOJIS])
 
         print(self.available_pokemon)
 
