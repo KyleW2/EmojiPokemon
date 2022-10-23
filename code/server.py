@@ -3,7 +3,6 @@ import pokemon_pb2, pokemon_pb2_grpc
 import game_constants
 import random
 import grpc
-from os import system
 
 class Pokemon(pokemon_pb2_grpc.PokemonServicer):
     def __init__(self):
@@ -57,7 +56,6 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
     
     # Prints board
     def printBoard(self):
-        system("clear")
         for i in range(0, game_constants.GRID_SIZE):
             for j in range(0, game_constants.GRID_SIZE):
                 # If empty print " "
