@@ -37,6 +37,8 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
 
         # Spawn player on board
         self.spawnPlayer(name.name)
+        
+        self.printBoard()
 
         # Insert into players dictionary
         self.players[name.name] = emoji
