@@ -38,10 +38,8 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         self.players[name.name] = emoji
 
         # Spawn player on board
-        print("spawning player")
         self.spawnPlayer(name.name)
         
-        print("printing board")
         self.printBoard()
 
         return pokemon_pb2.Emoji(emoji = emoji)
@@ -70,7 +68,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             print()
 
 def start():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers = 1))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers = 2))
     pokemon_pb2_grpc.add_PokemonServicer_to_server(Pokemon(), server)
     server.add_insecure_port(f"[::]:{game_constants.PORT}")
     server.start()
