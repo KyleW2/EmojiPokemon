@@ -14,7 +14,6 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         self.available_pokemon = random.shuffle(game_constants.POKEMON_EMOJIS)
 
     def join(self, name, context):
-        print(f"{name.name} is trying to join")
         # Get correct emoji for trainer or pokemon
         if "trainer" in name.name:
             emoji = self.available_trainers.pop()
@@ -26,6 +25,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
 
         # Insert into players dictionary
         self.players[name.name] = emoji
+        print(self.players)
         return pokemon_pb2.Emoji(emoji = emoji)
 
 def start():
