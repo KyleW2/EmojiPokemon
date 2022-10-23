@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package pokemon;
+
+service Pokemon {
+  rpc join (Name) returns (Emoji) {}
+  rpc get_neighbors (Name) returns (Neighbors) {}
+  rpc move (Name, Move) returns (Result) {}
+  rpc capture (Name) returns (Result) {}
+  rpc captured (Name) returns () {}
+}
+
+message Name {
+  optional string name = 1;
+}
+  
+message Emoji {
+  optional string emoji = 1;
+}
+
+message Move {
+  optional string direction = 1;
+}
+
+message Result {
+  optional bool success = 1;
+}
+
+message Neighbors {
+  optional string north = 1;
+  optional string north_east = 2;
+  optional string east = 3;
+  optional string south_east = 4;
+  optional string south = 5;
+  optional string south_west = 6;
+  optional string west = 7;
+  optional string north_west = 8;
+}
