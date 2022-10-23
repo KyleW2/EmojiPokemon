@@ -7,7 +7,7 @@ service Pokemon {
   rpc get_neighbors (Name) returns (Neighbors) {}
   rpc move (Name, Move) returns (Result) {}
   rpc capture (Name) returns (Result) {}
-  rpc captured (Name) returns () {}
+  rpc captured (Name) returns (Nothing) {}
 }
 
 message Name {
@@ -24,6 +24,10 @@ message Move {
 
 message Result {
   optional bool success = 1;
+}
+
+message Nothing {
+
 }
 
 message Neighbors {
