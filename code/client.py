@@ -11,9 +11,13 @@ def start(name):
 
             print(f"I am {response.emoji}!")
 
-            game_constants.gracefull_stop()
+            gracefull_stop()
 
     except:
         # Incase server hasn't started yet
         time.sleep(3)
         start(name)
+
+
+def gracefull_stop():
+    raise KeyboardInterrupt()

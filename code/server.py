@@ -29,7 +29,6 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
 
         # Insert into players dictionary
         self.players[name.name] = emoji
-        print(self.players)
         return pokemon_pb2.Emoji(emoji = emoji)
 
 def start():
