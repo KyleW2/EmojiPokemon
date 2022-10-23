@@ -5,7 +5,7 @@ package pokemon;
 service Pokemon {
   rpc join (Name) returns (Emoji) {}
   rpc get_neighbors (Name) returns (Neighbors) {}
-  rpc move (Name, Move) returns (Result) {}
+  rpc move (Move) returns (Result) {}
   rpc capture (Name) returns (Result) {}
   rpc captured (Name) returns (Nothing) {}
 }
@@ -19,7 +19,8 @@ message Emoji {
 }
 
 message Move {
-  optional string direction = 1;
+  optional string name = 1;
+  optional string direction = 2;
 }
 
 message Result {
