@@ -30,9 +30,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /usr/src/app
 
 # Create the protobuf files
-# RUN protoc --python_out=. guessing_game.proto
+# RUN protoc --python_out=. pokemon.proto
 # Code below works similarly
-RUN python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. guessing_game.proto
+RUN python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. pokemon.proto
 
 EXPOSE 22
 EXPOSE 80
