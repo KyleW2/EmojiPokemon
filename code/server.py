@@ -3,19 +3,27 @@ import pokemon_pb2, pokemon_pb2_grpc
 import game_constants
 import random
 import grpc
+from os import system
 
 class Pokemon(pokemon_pb2_grpc.PokemonServicer):
     def __init__(self):
         # A dictionary mapping player names to their emoji
         self.players = {}
 
-        
         self.available_trainers = game_constants.TRAINER_EMOJIS
         self.available_pokemon = game_constants.POKEMON_EMOJIS
 
         # Shuffle the emoji list so i dont get bored of the same 3 emojis
         random.shuffle(self.available_trainers)
         random.shuffle(self.available_pokemon)
+
+        # To save on look-up time and for general simplicity im using two hashmaps 
+        # rather than an NxN matrix
+        self.player_to_space = {}
+        self.space_to_players = {}
+        for i in range(0, game_constants.GRID_SIZE):
+            for j in range(0, game_constants.GRID_SIZE):
+                self.spaces[(i, j)] = []
 
     def join(self, name, context):
         # Get correct emoji for trainer or pokemon
@@ -27,9 +35,36 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             print("stranger danger")
             game_constants.gracefull_stop()
 
+        # Spawn player on board
+        self.spawnPlayer(name.name)
+
         # Insert into players dictionary
         self.players[name.name] = emoji
         return pokemon_pb2.Emoji(emoji = emoji)
+    
+    # Calls itself until a free space is found for player
+    def spawnPlayer(self, name):
+        i = random.randint(0, game_constants.GRID_SIZE)
+        j = random.randint(0, game_constants.GRID_SIZE)
+
+        if self.space_to_players[(i, j)] == []:
+            self.space_to_players[(i, j)].append(name)
+            self.player_to_space[name] = (i, j)
+        else:
+            return self.spawnPlayer(name)
+    
+    # Prints board
+    def printBoard(self):
+        system("clear")
+        for i in range(0, game_constants.GRID_SIZE):
+            for j in range(0, game_constants.GRID_SIZE):
+                # If empty print " "
+                if self.space_to_players == []:
+                    print(" ", end = "")
+                # If occupied print players emoji
+                else:
+                    print(self.players[self.space_to_players[(i, j)]])
+            print()
 
 def start():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers = 1))
