@@ -1,6 +1,6 @@
 import pokemon_pb2, pokemon_pb2_grpc
 import game_constants
-import time, signal, grp
+import time, signal, grpc
 
 def start(name):
     try:
