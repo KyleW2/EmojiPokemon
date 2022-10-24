@@ -7,10 +7,16 @@ services:
     container_name: Server
     networks:
       - default
+  client0:
+    build: .
+    hostname: trainer0
+    container_name: trainer0
+    networks:
+      - default
   client1:
     build: .
-    hostname: trainer1
-    container_name: trainer1
+    hostname: pokemon0
+    container_name: pokemon0
     networks:
       - default
   client2:
@@ -19,13 +25,6 @@ services:
     container_name: pokemon1
     networks:
       - default
-  client3:
-    build: .
-    hostname: pokemon2
-    container_name: pokemon2
-    networks:
-      - default
-
 networks:
   default:
     driver: bridge
