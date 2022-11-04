@@ -13,30 +13,30 @@ def pokemon(name, stub):
         response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
 
 def start(name):
+    # Join the game
     try:
         with grpc.insecure_channel(f"server:{game_constants.PORT}") as channel:
-            # Get name
             stub = pokemon_pb2_grpc.PokemonStub(channel)
             response = stub.join(pokemon_pb2.Name(name = name))
 
             print(f"I am {response.emoji}!")
-
-            # Begin playing
-            if "trainer" in name:
-                trainer(name, stub)
-            elif "pokemon" in name:
-                pokemon(name, stub)
-            else:
-                print("😳")
-
-            # Stop
-            signal.signal(signal.SIGTERM, gracefull_stop)
 
     except Exception as e:
         # Incase server hasn't started yet
         print(e)
         time.sleep(3)
         start(name)
+
+    # Begin playing
+    if "trainer" in name:
+        trainer(name, stub)
+    elif "pokemon" in name:
+        pokemon(name, stub)
+    else:
+        print("😳")
+
+    # Stop
+    signal.signal(signal.SIGTERM, gracefull_stop)
 
 
 def gracefull_stop():
