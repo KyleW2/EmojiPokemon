@@ -15,7 +15,7 @@ def pokemon(name, stub):
 def start(name):
     # Join the game
     try:
-        channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
+        channel = grpc.insecure_channel(f"server:{game_constants.PORT}", options = (("grpc.enable_http_proxy", 0)))
         stub = pokemon_pb2_grpc.PokemonStub(channel)
         response = stub.join(pokemon_pb2.Name(name = name))
 
