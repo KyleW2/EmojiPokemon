@@ -34,6 +34,7 @@ def start(name):
 
     except Exception as e:
         # Incase server hasn't started yet
+        print(e)
         time.sleep(3)
         start(name)
 

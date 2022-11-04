@@ -95,13 +95,16 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         elif move.direction == "north_west":
             new_location = (x - 1, y - 1)
 
+        # Set location to new one if possible
         if new_location[0] < game_constants.GRID_SIZE and new_location[1] < game_constants.GRID_SIZE:
-            # Set location to new one
             self.space_to_players[new_location].append(move.name)
             self.player_to_space[move.name] = new_location
 
             return pokemon_pb2.Result(success = True, captured = move.name in self.captured)
 
+        # Otherwise set to old location
+        self.space_to_players[old_location].append(move.name)
+        self.player_to_space[move.name] = old_location
         return pokemon_pb2.Result(success = False, captured = move.name in self.captured)
 
     # Prints board
