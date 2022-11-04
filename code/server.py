@@ -9,6 +9,8 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # A dictionary mapping player names to their emoji
         self.players = {}
 
+        self.captured = []
+
         self.available_trainers = game_constants.TRAINER_EMOJIS
         self.available_pokemon = game_constants.POKEMON_EMOJIS
 
@@ -98,9 +100,9 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             self.space_to_players[new_location].append(move.name)
             self.player_to_space[move.name] = new_location
 
-            return pokemon_pb2.Result(success = True)
+            return pokemon_pb2.Result(success = True, captured = move.name in self.captured)
 
-        return pokemon_pb2.Result(success = False)
+        return pokemon_pb2.Result(success = False, captured = move.name in self.captured)
 
     # Prints board
     def printBoard(self):
@@ -108,10 +110,10 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             for j in range(0, game_constants.GRID_SIZE):
                 # If empty print " "
                 if self.space_to_players[(i, j)] == []:
-                    print("🟩  ", end = "")
+                    print("⬛ ", end = "")
                 # If occupied print players emoji
                 else:
-                    print(self.players[self.space_to_players[(i, j)][0]] + "  ", end = "")
+                    print(self.players[self.space_to_players[(i, j)][0]] + " ", end = "")
             print()
 
 def start():

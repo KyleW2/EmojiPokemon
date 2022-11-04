@@ -9,7 +9,7 @@ def trainer(name, stub):
 def pokemon(name, stub):
     response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
 
-    while response.success:
+    while not response.captured:
         response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
 
 def start(name):
