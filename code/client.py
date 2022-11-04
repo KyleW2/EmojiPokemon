@@ -6,7 +6,10 @@ import random
 def trainer(name, stub):
     pass
 
-def pokemon(name, stub):
+def pokemon(name):
+    channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
+    stub = pokemon_pb2_grpc.PokemonStub(channel)
+
     response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
 
     while not response.captured:
@@ -15,7 +18,7 @@ def pokemon(name, stub):
 def start(name):
     # Join the game
     try:
-        channel = grpc.insecure_channel(f"server:{game_constants.PORT}", options = (("grpc.enable_http_proxy", 0),))
+        channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
         stub = pokemon_pb2_grpc.PokemonStub(channel)
         response = stub.join(pokemon_pb2.Name(name = name))
 
@@ -23,15 +26,14 @@ def start(name):
 
     except Exception as e:
         # Incase server hasn't started yet
-        print(e)
         time.sleep(3)
         start(name)
 
     # Begin playing
     if "trainer" in name:
-        trainer(name, stub)
+        trainer(name)
     elif "pokemon" in name:
-        pokemon(name, stub)
+        pokemon(name)
     else:
         print("😳")
 
