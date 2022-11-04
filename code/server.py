@@ -55,7 +55,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         else:
             return self.spawnPlayer(name)
     
-    def get_neighbors(self, name):
+    def get_neighbors(self, name, context):
         x, y = self.player_to_space[name.name]
 
         return pokemon_pb2.Neighbors(
@@ -69,7 +69,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             north_west = self.space_to_players[(x - 1, y - 1)]
         )
     
-    def move(self, move):
+    def move(self, move, context):
         # Remove player from space_to_player
         old_location = self.player_to_space[move.name]
         x, y = self.player_to_space[move.name]
