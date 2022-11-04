@@ -32,8 +32,9 @@ def start(name):
             # Stop
             signal.signal(signal.SIGTERM, gracefull_stop)
 
-    except:
+    except Exception as e:
         # Incase server hasn't started yet
+        print(e)
         time.sleep(3)
         start(name)
 
