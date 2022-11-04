@@ -7,10 +7,10 @@ def trainer(name, stub):
     pass
 
 def pokemon(name, stub):
-    response = stub.move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)])
+    response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
 
     while response.success:
-        response = stub.move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)])
+        response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
 
 def start(name):
     try:
