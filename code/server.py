@@ -69,6 +69,39 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             north_west = self.space_to_players[(x - 1, y - 1)]
         )
     
+    def move(self, move):
+        # Remove player from space_to_player
+        old_location = self.player_to_space[move.name]
+        x, y = self.player_to_space[move.name]
+        self.space_to_players[old_location].remove(move.name)
+
+        # Ugh
+        if move.direction == "north":
+            new_location = (x, y - 1)
+        elif move.direction == "north_east":
+            new_location = (x + 1, y - 1)
+        elif move.direction == "east":
+            new_location = (x + 1, y)
+        elif move.direction == "south_east":
+            new_location = (x + 1, y + 1)
+        elif move.direction == "south":
+            new_location = (x, y + 1)
+        elif move.direction == "south_west":
+            new_location = (x - 1, y + 1)
+        elif move.direction == "west":
+            new_location = (x - 1, y)
+        elif move.direction == "north_west":
+            new_location = (x - 1, y - 1)
+
+        if new_location[0] < game_constants.GRID_SIZE and new_location[1] < game_constants.GRID_SIZE:
+            # Set location to new one
+            self.space_to_players[new_location].append(move.name)
+            self.player_to_space[move.name] = new_location
+
+            return pokemon_pb2.Result(success = True)
+
+        return pokemon_pb2.Result(success = False)
+
     # Prints board
     def printBoard(self):
         for i in range(0, game_constants.GRID_SIZE):
