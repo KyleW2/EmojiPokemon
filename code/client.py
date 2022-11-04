@@ -14,7 +14,7 @@ def pokemon(name, stub):
 
 def start(name):
     try:
-        with grpc.insecure_channel(f"server:{game_constants.PORT}") as channel:\
+        with grpc.insecure_channel(f"server:{game_constants.PORT}") as channel:
             # Get name
             stub = pokemon_pb2_grpc.PokemonStub(channel)
             response = stub.join(pokemon_pb2.Name(name = name))
