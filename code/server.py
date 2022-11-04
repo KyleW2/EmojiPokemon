@@ -108,7 +108,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             for j in range(0, game_constants.GRID_SIZE):
                 # If empty print " "
                 if self.space_to_players[(i, j)] == []:
-                    print(" ", end = "")
+                    print("🟩", end = "")
                 # If occupied print players emoji
                 else:
                     print(self.players[self.space_to_players[(i, j)][0]], end = "")
