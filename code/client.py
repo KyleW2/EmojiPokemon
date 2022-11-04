@@ -3,7 +3,7 @@ import game_constants
 import time, signal, grpc
 import random
 
-def trainer(name, stub):
+def trainer(name):
     pass
 
 def pokemon(name):
