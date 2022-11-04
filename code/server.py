@@ -55,6 +55,20 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         else:
             return self.spawnPlayer(name)
     
+    def get_neighbors(self, name):
+        x, y = self.player_to_space[name.name]
+
+        return pokemon_pb2.Neighbors(
+            north = self.space_to_players[(x, y - 1)],
+            north_east = self.space_to_players[(x + 1, y - 1)],
+            east = self.space_to_players[(x + 1, y)],
+            south_east = self.space_to_players[(x + 1, y + 1)],
+            south = self.space_to_players[(x, y + 1)],
+            south_west = self.space_to_players[(x - 1, y + 1)],
+            west = self.space_to_players[(x - 1, y)],
+            north_west = self.space_to_players[(x - 1, y - 1)]
+        )
+    
     # Prints board
     def printBoard(self):
         for i in range(0, game_constants.GRID_SIZE):
