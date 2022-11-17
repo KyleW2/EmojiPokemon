@@ -4,6 +4,7 @@ TWO = "  "
 FOUR = TWO + TWO
 TRAINER_EMOJIS = '😀😁😂😎😍🤩😴🤐🙄😝🤑😤😨🥶🥵😡🤢🤡🤠'
 POKEMON_EMOJIS = '🐱🐍🐌🐵🐶🐺🦁🐯🦒🦊🦝🐮🐷🐗🐭🐹🐰🐻🐨🐼🐸🦓🐴🦄🐔🐲🐉🦕🐀🦔🐇🐿🦖🦎🐊🐢🐍🐬🐠🐟'
+DIRECTIONS = ["north", "north_east", "north_west", "east", "west", "south", "south_east", "south_west"]
 
 def header():
     return "version: '3.7'\n\nservices:\n"
@@ -52,7 +53,8 @@ def build_constants(n, trainer_emojis = TRAINER_EMOJIS, pokemon_emojis = POKEMON
     out = f"TRAINER_EMOJIS = '{trainer_emojis}'\n"
     out += "TRAINER_EMOJIS = [emoji for emoji in TRAINER_EMOJIS]\n"
     out += f"POKEMON_EMOJIS = '{pokemon_emojis}'\n"
-    out += "POKEMON_EMOJIS = [emoji for emoji in POKEMON_EMOJIS]\n\n"
+    out += "POKEMON_EMOJIS = [emoji for emoji in POKEMON_EMOJIS]\n"
+    out += f"DIRECTIONS = {DIRECTIONS}\n\n"
     out += "PORT = 50051\n"
     out += f"GRID_SIZE = {n}"
 
