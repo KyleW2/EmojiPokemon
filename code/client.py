@@ -12,8 +12,11 @@ def pokemon(name):
 
     response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
 
+    print(response.captured)
+    """
     while not response.captured:
         response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
+    """
 
 def start(name):
     # Join the game
@@ -21,6 +24,7 @@ def start(name):
         channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
         stub = pokemon_pb2_grpc.PokemonStub(channel)
         response = stub.join(pokemon_pb2.Name(name = name))
+        channel.close()
 
         print(f"I am {response.emoji}!")
 
