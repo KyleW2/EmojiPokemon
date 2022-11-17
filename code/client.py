@@ -26,7 +26,7 @@ def start(name):
         response = stub.join(pokemon_pb2.Name(name = name))
         channel.close()
 
-        print(f"I am {response.emoji}!")
+        print(f"I am {response.emoji}")
 
     except Exception as e:
         # Incase server hasn't started yet
