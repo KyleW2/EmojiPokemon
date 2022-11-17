@@ -62,7 +62,7 @@ def build_constants(n, trainer_emojis = TRAINER_EMOJIS, pokemon_emojis = POKEMON
 if __name__ == "__main__":
     if len(sys.argv) != 4:
         print("Please provide the grid size, number of trainers, and number of pokemon")
-        print("buildman.py <N> <T> <P>")
+        print("config.py <N> <T> <P>")
         exit()
     
     n = int(sys.argv[1])
