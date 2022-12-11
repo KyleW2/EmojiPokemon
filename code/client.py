@@ -36,7 +36,8 @@ class Client:
             self.join()
     
     def get_lock(self):
-        self.lock = self.stub.lock(pokemon_pb2.Name(name = self.name)).success
+        response = self.stub.lock(pokemon_pb2.Name(name = self.name))
+        self.lock = response.success
 
     def stop(self):
         self.channel.close()
