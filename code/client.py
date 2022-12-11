@@ -39,7 +39,7 @@ class Client:
         return response.success
 
     def stop(self):
-        signal.signal(signal.SIGTERM, interrupt())
+        signal.signal(signal.SIGTERM, interrupt)
 
     def trainer(self):
         if self.lock: 
