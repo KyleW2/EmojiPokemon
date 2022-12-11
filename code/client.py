@@ -24,9 +24,9 @@ class Client:
         try:
             # Try to create the channel and stub
             channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
-            stub = pokemon_pb2_grpc.PokemonStub(self.channel)
+            stub = pokemon_pb2_grpc.PokemonStub(channel)
 
-            response = self.stub.join(pokemon_pb2.Name(name = self.name))
+            response = stub.join(pokemon_pb2.Name(name = self.name))
 
             print(f"I am {response.emoji}")
         except Exception as e:
