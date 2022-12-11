@@ -49,8 +49,11 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         return pokemon_pb2.Emoji(emoji = emoji)
     
     def lock(self, name, context):
+        print(f"{name.name} wants the lock")
+
         if self.who_has_lock == "":
             self.who_has_lock = name.name
+            print(f"Giving the lock to {name.name}")
             return pokemon_pb2.Lock(success = True)
             
         return pokemon_pb2.Lock(success = False)
