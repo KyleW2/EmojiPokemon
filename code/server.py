@@ -11,6 +11,8 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
 
         self.captured = []
 
+        self.lock = None
+
         self.available_trainers = game_constants.TRAINER_EMOJIS
         self.available_pokemon = game_constants.POKEMON_EMOJIS
 
@@ -45,6 +47,13 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         self.printBoard()
 
         return pokemon_pb2.Emoji(emoji = emoji)
+    
+    def lock(self, name, context):
+        if self.lock == None:
+            self.lock = name.name
+            return pokemon_pb2.Lock(success = True)
+            
+        return pokemon_pb2.Lock(success = False)
     
     # Calls itself until a free space is found for player
     def spawnPlayer(self, name):

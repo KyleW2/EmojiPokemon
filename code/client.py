@@ -3,48 +3,70 @@ import game_constants
 import time, signal, grpc
 import random
 
-def trainer(name):
-    pass
+class Client:
+    def __init__(self, name: str) -> None:
+        self.name = str
+        self.lock = False
+        self.stub = None
+    
+    def play(self) -> None:
+        # Join the game
+        self.join()
 
-def pokemon(name):
-    channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
-    stub = pokemon_pb2_grpc.PokemonStub(channel)
+        # Play as the correct type
+        if "trainer" in self.name:
+            self.trainer()
+        elif "pokemon" in self.name:
+            self.pokemon()
+        else:
+            print("😳")
+    
+    def join(self) -> None:
+        try:
+            # Try to create the channel and stub
+            self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
+            self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
 
-    response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
+            response = self.stub.join(pokemon_pb2.Name(name = self.name))
 
-    print(response.captured)
-    """
-    while not response.captured:
+            print(f"I am {response.emoji}")
+        except Exception as e:
+            # Incase server hasn't started yet
+            time.sleep(1)
+            self.join(self.name)
+    
+    def get_lock(self):
+        self.lock = self.stub.lock(pokemon_pb2.Name(name = self.name)).success
+
+    def stop(self):
+        self.channel.close()
+        raise KeyboardInterrupt()
+
+    def trainer(self):
+        if self.lock: 
+            print("I got the lock!")
+        else:
+            print("Who took the lock?!")
+
+    def pokemon(self):
+        if self.lock: 
+            print("I got the lock!")
+        else:
+            print("Who took the lock?!")
+
+        """
         response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
-    """
+
+        print(response.captured)
+        while not response.captured:
+            response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
+        """
 
 def start(name):
-    # Join the game
-    try:
-        channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
-        stub = pokemon_pb2_grpc.PokemonStub(channel)
-        response = stub.join(pokemon_pb2.Name(name = name))
-        channel.close()
-
-        print(f"I am {response.emoji}")
-
-    except Exception as e:
-        # Incase server hasn't started yet
-        time.sleep(3)
-        start(name)
-
-    # Begin playing
-    if "trainer" in name:
-        trainer(name)
-    elif "pokemon" in name:
-        pokemon(name)
-    else:
-        print("😳")
-
-    # Stop
-    signal.signal(signal.SIGTERM, gracefull_stop)
+    client = Client(name)
+    client.play()
+    client.stop()
 
 
-def gracefull_stop():
-    raise KeyboardInterrupt()
+
     

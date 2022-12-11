@@ -4,6 +4,7 @@ package pokemon;
 
 service Pokemon {
   rpc join (Name) returns (Emoji) {}
+  rpc lock(Name) returns (Lock) {}
   rpc get_neighbors (Name) returns (Neighbors) {}
   rpc move (Move) returns (Result) {}
   rpc capture (Name) returns (Emoji) {}
@@ -11,6 +12,10 @@ service Pokemon {
 
 message Name {
   optional string name = 1;
+}
+
+message Lock {
+  optional bool success = 1;
 }
   
 message Emoji {
