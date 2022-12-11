@@ -28,6 +28,8 @@ class Client:
 
             response = stub.join(pokemon_pb2.Name(name = self.name))
 
+            channel.close()
+
             print(f"I am {response.emoji}")
         except Exception as e:
             # Incase server hasn't started yet
@@ -36,13 +38,14 @@ class Client:
     
     def get_lock(self):
         channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
-        stub = pokemon_pb2_grpc.PokemonStub(self.channel)
+        stub = pokemon_pb2_grpc.PokemonStub(channel)
 
         response = stub.lock(pokemon_pb2.Name(name = self.name))
         self.lock = response.success
 
+        channel.close()
+
     def stop(self):
-        self.channel.close()
         signal.signal(signal.SIGTERM, interrupt())
 
     def trainer(self):
