@@ -5,7 +5,7 @@ import random
 
 class Client:
     def __init__(self, name: str) -> None:
-        self.name = str
+        self.name = name
         self.lock = False
         self.stub = None
     
