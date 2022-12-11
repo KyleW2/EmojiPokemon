@@ -7,6 +7,7 @@ class Client:
     def __init__(self, name: str) -> None:
         self.name = name
         self.lock = False
+        self.is_captured = False
     
     def play(self) -> None:
         # Join the game
@@ -39,7 +40,8 @@ class Client:
         self.lock = response.success
     
     def captured(self):
-        pass
+        self.channel.close()
+        self.stop()
 
     def stop(self):
         signal.signal(signal.SIGTERM, interrupt)
@@ -48,24 +50,23 @@ class Client:
         pass
 
     def pokemon(self):
-        # Try to get the lock
-        self.get_lock()
+        while not self.is_captured:
+            # Try to get the lock
+            self.get_lock()
 
-        # If we have the lock
-        if self.lock:
-            # Make a random move
-            direction = game_constants.DIRECTIONS[random.randint(0, 7)]
-            response = self.stub.move(pokemon_pb2.Move(name = self.name, direction = direction))
+            # If we have the lock
+            if self.lock:
+                # Make a random move
+                direction = game_constants.DIRECTIONS[random.randint(0, 7)]
+                response = self.stub.move(pokemon_pb2.Move(name = self.name, direction = direction))
 
-            # Set the lock to false
-            self.lock = False
+                # Set the lock to false
+                self.lock = False
 
-            # If captured
-            if response.captured:
-                self.captured()
-        
-        # Do it again!
-        self.pokemon()
+                # If captured
+                self.is_captured = response.captured
+                if self.is_captured:
+                    self.captured()
 
 def interrupt():
     raise KeyboardInterrupt()
