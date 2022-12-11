@@ -10,6 +10,7 @@ class Client:
         self.stub = None
     
     def play(self) -> None:
+        print("playing")
         # Join the game
         self.join()
 
@@ -22,6 +23,7 @@ class Client:
             print("😳")
     
     def join(self) -> None:
+        print("joining")
         try:
             # Try to create the channel and stub
             self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
