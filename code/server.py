@@ -115,7 +115,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         print(f"{move.name} wants to move from {old_location} to {new_location}")
 
         # Set location to new one if possible
-        if new_location[0] < game_constants.GRID_SIZE and new_location[1] < game_constants.GRID_SIZE:
+        if new_location[0] < game_constants.GRID_SIZE and new_location[0] > 0 and new_location[1] < game_constants.GRID_SIZE and new_location[1] > 0:
             self.space_to_players[new_location].append(move.name)
             self.player_to_space[move.name] = new_location
 
