@@ -142,7 +142,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             print()
 
 def start():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers = 1))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers = None))
     pokemon_pb2_grpc.add_PokemonServicer_to_server(Pokemon(), server)
     server.add_insecure_port(f"[::]:{game_constants.PORT}")
     server.start()
