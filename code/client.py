@@ -7,7 +7,6 @@ class Client:
     def __init__(self, name: str) -> None:
         self.name = name
         self.lock = False
-        self.stub = None
     
     def play(self) -> None:
         # Join the game
@@ -24,8 +23,8 @@ class Client:
     def join(self) -> None:
         try:
             # Try to create the channel and stub
-            self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
-            self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
+            channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
+            stub = pokemon_pb2_grpc.PokemonStub(self.channel)
 
             response = self.stub.join(pokemon_pb2.Name(name = self.name))
 
@@ -36,7 +35,10 @@ class Client:
             self.join()
     
     def get_lock(self):
-        response = self.stub.lock(pokemon_pb2.Name(name = self.name))
+        channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
+        stub = pokemon_pb2_grpc.PokemonStub(self.channel)
+
+        response = stub.lock(pokemon_pb2.Name(name = self.name))
         self.lock = response.success
 
     def stop(self):
