@@ -40,19 +40,21 @@ class Client:
 
     def stop(self):
         self.channel.close()
-        interrupt()
+        signal.signal(signal.SIGTERM, interrupt())
 
     def trainer(self):
         if self.lock: 
             print("I got the lock!")
         else:
             print("Who took the lock?!")
+            self.get_lock()
 
     def pokemon(self):
         if self.lock: 
             print("I got the lock!")
         else:
             print("Who took the lock?!")
+            self.get_lock()
 
         """
         response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
