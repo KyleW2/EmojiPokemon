@@ -45,6 +45,27 @@ class Client:
 
     def stop(self):
         signal.signal(signal.SIGTERM, interrupt)
+    
+    def get_direction(self):
+        # Get neighbors
+        neighbors = self.stub.get_neighbors(pokemon_pb2.Name(name = self.name))
+
+        # Iterate over space -> players dictionary
+        for space, players in vars(neighbors).items():
+            for player in players:
+                # If we are a pokemon
+                if "pokemon" in self.name:
+                    if "trainer" in player:
+                        # Move away from trainers
+                        return game_constants.OPPOSITE_DIRECTION[space]
+                # If we are a trainer
+                else:
+                    if "pokemon" in player:
+                        # Move towards pokemon
+                        return space
+        
+        # If no ones around us :'(
+        return game_constants.DIRECTIONS[random.randint(0, 7)]
 
     def trainer(self):
         pass
@@ -56,8 +77,8 @@ class Client:
 
             # If we have the lock
             if self.lock:
-                # Make a random move
-                direction = game_constants.DIRECTIONS[random.randint(0, 7)]
+                # Find direction to move away from trainer
+                direction = self.get_direction()
                 response = self.stub.move(pokemon_pb2.Move(name = self.name, direction = direction))
 
                 # Set the lock to false
