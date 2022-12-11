@@ -36,7 +36,7 @@ class Client:
     
     def get_lock(self):
         response = self.stub.lock(pokemon_pb2.Name(name = self.name))
-        print(response)
+        return response.success
 
     def stop(self):
         signal.signal(signal.SIGTERM, interrupt())
