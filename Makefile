@@ -5,3 +5,5 @@ run:
 pull:
 	git pull
 	cd code && docker-compose up --build
+clean:
+	cd code && docker-compose up --remove-orphans
