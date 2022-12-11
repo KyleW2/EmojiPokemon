@@ -10,7 +10,6 @@ class Client:
         self.stub = None
     
     def play(self) -> None:
-        print("playing")
         # Join the game
         self.join()
 
@@ -23,7 +22,6 @@ class Client:
             print("😳")
     
     def join(self) -> None:
-        print("joining")
         try:
             # Try to create the channel and stub
             self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
@@ -42,7 +40,7 @@ class Client:
 
     def stop(self):
         self.channel.close()
-        raise KeyboardInterrupt()
+        interrupt()
 
     def trainer(self):
         if self.lock: 
@@ -63,6 +61,9 @@ class Client:
         while not response.captured:
             response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
         """
+
+def interrupt():
+    raise KeyboardInterrupt()
 
 def start(name):
     client = Client(name)
