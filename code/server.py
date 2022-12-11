@@ -49,8 +49,6 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         return pokemon_pb2.Emoji(emoji = emoji)
     
     def lock(self, name, context):
-        print(f"{name.name} wants the lock")
-
         if self.who_has_lock == "":
             self.who_has_lock = name.name
             print(f"Giving the lock to {name.name}")
@@ -84,6 +82,13 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         )
     
     def move(self, move, context):
+        # Make sure they're holding the lock
+        if move.name != self.who_has_lock:
+            return pokemon_pb2.Result(success = False, captured = move.name in self.captured)
+
+        # Release the lock
+        self.who_has_lock = ""
+
         # Remove player from space_to_player
         old_location = self.player_to_space[move.name]
         x, y = self.player_to_space[move.name]
@@ -117,6 +122,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # Otherwise set to old location
         self.space_to_players[old_location].append(move.name)
         self.player_to_space[move.name] = old_location
+
         return pokemon_pb2.Result(success = False, captured = move.name in self.captured)
 
     # Prints board

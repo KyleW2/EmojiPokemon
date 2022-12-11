@@ -37,28 +37,35 @@ class Client:
     def get_lock(self):
         response = self.stub.lock(pokemon_pb2.Name(name = self.name))
         self.lock = response.success
+    
+    def captured(self):
+        pass
 
     def stop(self):
         signal.signal(signal.SIGTERM, interrupt)
 
     def trainer(self):
-        self.pokemon()
+        pass
 
     def pokemon(self):
+        # Try to get the lock
         self.get_lock()
 
-        if self.lock: 
-            print("I got the lock!")
-        else:
-            print("Who took the lock?!")
+        # If we have the lock
+        if self.lock:
+            # Make a random move
+            direction = game_constants.DIRECTIONS[random.randint(0, 7)]
+            response = self.stub.move(pokemon_pb2.Move(name = self.name, direction = direction))
 
-        """
-        response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
+            # Set the lock to false
+            self.lock = False
 
-        print(response.captured)
-        while not response.captured:
-            response = stub.move(pokemon_pb2.Move(name = name, direction = game_constants.DIRECTIONS[random.randint(0, 7)]))
-        """
+            # If captured
+            if response.captured:
+                self.captured()
+        
+        # Do it again!
+        self.pokemon()
 
 def interrupt():
     raise KeyboardInterrupt()
