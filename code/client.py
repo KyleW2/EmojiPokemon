@@ -28,8 +28,6 @@ class Client:
 
             response = stub.join(pokemon_pb2.Name(name = self.name))
 
-            channel.close()
-
             print(f"I am {response.emoji}")
         except Exception as e:
             # Incase server hasn't started yet
@@ -42,8 +40,6 @@ class Client:
 
         response = stub.lock(pokemon_pb2.Name(name = self.name))
         self.lock = response.success
-
-        channel.close()
 
     def stop(self):
         signal.signal(signal.SIGTERM, interrupt())
