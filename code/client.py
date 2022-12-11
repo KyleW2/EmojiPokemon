@@ -33,7 +33,7 @@ class Client:
         except Exception as e:
             # Incase server hasn't started yet
             time.sleep(1)
-            self.join(self.name)
+            self.join()
     
     def get_lock(self):
         self.lock = self.stub.lock(pokemon_pb2.Name(name = self.name)).success
