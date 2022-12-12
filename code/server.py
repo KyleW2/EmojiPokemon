@@ -9,8 +9,10 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # A dictionary mapping player names to their emoji
         self.players = {}
 
+        # A list of player names that have been captured
         self.captured = []
 
+        # A string of the player that currently holds the lock
         self.who_has_lock = ""
 
         self.available_trainers = game_constants.TRAINER_EMOJIS
@@ -55,6 +57,19 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             return pokemon_pb2.Lock(success = True)
             
         return pokemon_pb2.Lock(success = False)
+
+    def capture(self, name, context):
+        # Get capturing player's location
+        location = self.player_to_space[name.name]
+
+        # If there is a pokemon -> return that mon's emoji
+        for player in self.space_to_players[location]:
+            if "pokemon" in player:
+                self.captured.append(player)
+                return pokemon_pb2.Emoji(emoji = self.players[player])
+        
+        # Otherwise return empty
+        return pokemon_pb2.Emoji(emoji = "")
     
     # Calls itself until a free space is found for player
     def spawnPlayer(self, name):

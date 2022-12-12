@@ -8,6 +8,8 @@ class Client:
         self.name = name
         self.lock = False
         self.is_captured = False
+        self.direction = []
+        self.pokedex = []
     
     def play(self) -> None:
         # Join the game
@@ -77,6 +79,9 @@ class Client:
                 # If we are a trainer
                 else:
                     if "pokemon" in player.name:
+                        # Set flag to try and capture next step
+                        self.try_to_capture = True
+
                         # Move towards pokemon
                         return space
         
@@ -84,7 +89,42 @@ class Client:
         return game_constants.DIRECTIONS[random.randint(0, 7)]
 
     def trainer(self):
-        pass
+        # is_captured for trainers will essentially server
+        # as a "are there any pokemon" left flag
+        while not self.is_captured:
+            # Try to get the lock
+            self.get_lock()
+
+            # If we have the lock
+            if self.lock:
+                # If we think were on a pokemon
+                if self.try_to_capture:
+                    # Capture
+                    response = self.stub.capture(pokemon_pb2.Name(name = self.name))
+
+                    # If capture was successful, add pokemon to pokedex
+                    if response.emoji != "":
+                        self.pokedex.append(response.emoji)
+                    
+                    self.try_to_capture = False
+                    
+                # Otherwise, move spaces
+                else:
+                    # Find direction to move towards pokemon
+                    direction = self.get_direction()
+                    response = self.stub.move(pokemon_pb2.Move(name = self.name, direction = direction))
+
+                    # Record movement if it went through
+                    if response.success:
+                        self.path.append(direction)
+
+                    # If captured
+                    self.is_captured = response.captured
+                    if self.is_captured:
+                        self.captured()
+                
+                # Set the lock to false
+                self.lock = False
 
     def pokemon(self):
         while not self.is_captured:
@@ -99,6 +139,10 @@ class Client:
 
                 # Set the lock to false
                 self.lock = False
+
+                # Record movement if it went through
+                if response.success:
+                    self.path.append(direction)
 
                 # If captured
                 self.is_captured = response.captured
