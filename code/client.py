@@ -73,7 +73,7 @@ class Client:
                 if "pokemon" in self.name:
                     if "trainer" in player.name:
                         # Move away from trainers
-                        return game_constants.OPPOSITE_DIRECTION[space]
+                        return game_constants.OPPOSITE_DIRECTIONS[space]
                 # If we are a trainer
                 else:
                     if "pokemon" in player.name:
