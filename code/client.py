@@ -47,7 +47,7 @@ class Client:
         if "pokemon" in self.name:
             print("I've been captured!!!")
         else:
-            print(f"I collected {self.pokedex}")
+            print(f"I captured {self.pokedex}")
 
         self.print_log()
         self.channel.close()
