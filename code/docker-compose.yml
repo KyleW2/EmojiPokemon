@@ -15,11 +15,17 @@ services:
       - default
   client1:
     build: .
+    hostname: trainer1
+    container_name: trainer1
+    networks:
+      - default
+  client2:
+    build: .
     hostname: pokemon0
     container_name: pokemon0
     networks:
       - default
-  client2:
+  client3:
     build: .
     hostname: pokemon1
     container_name: pokemon1
