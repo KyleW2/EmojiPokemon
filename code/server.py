@@ -50,7 +50,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # Spawn player on board
         self.spawn_player(name.name)
         
-        self.printBoard()
+        self.print_board()
 
         return pokemon_pb2.Emoji(emoji = emoji)
     
@@ -81,6 +81,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
 
                 # If all pokemon have been captured
                 if len(self.captured) == self.pokemon_count:
+                    print("All pokemon have been captured! Game over.")
                     # Set all player (just the trainers left) as captured
                     for player in self.players.keys():
                         self.captured.append(player)
@@ -159,7 +160,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             self.space_to_players[new_location].append(move.name)
             self.player_to_space[move.name] = new_location
 
-            self.printBoard()
+            self.print_board()
 
             return pokemon_pb2.Result(success = True, captured = move.name in self.captured)
 
@@ -170,7 +171,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         return pokemon_pb2.Result(success = False, captured = move.name in self.captured)
 
     # Prints board
-    def printBoard(self):
+    def print_board(self):
         for i in range(0, game_constants.GRID_SIZE):
             for j in range(0, game_constants.GRID_SIZE):
                 # If empty print " "
