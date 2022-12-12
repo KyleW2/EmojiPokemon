@@ -163,6 +163,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
                     if "trainer" in player:
                         # Add trainer back to spot and return false
                         self.space_to_players[old_location].append(move.name)
+                        self.player_to_space[move.name] = old_location
                         return pokemon_pb2.Result(success = False, captured = move.name in self.captured)
             
             # If not -> move player
