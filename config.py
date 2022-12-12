@@ -5,6 +5,16 @@ FOUR = TWO + TWO
 TRAINER_EMOJIS = '😀😁😂😎😍🤩😴🤐🙄😝🤑😤😨🥶🥵😡🤢🤡🤠'
 POKEMON_EMOJIS = '🐱🐍🐌🐵🐶🐺🦁🐯🦒🦊🦝🐮🐷🐗🐭🐹🐰🐻🐨🐼🐸🦓🐴🦄🐔🐲🐉🦕🐀🦔🐇🐿🦖🦎🐊🐢🐍🐬🐠🐟'
 DIRECTIONS = ["north", "north_east", "north_west", "east", "west", "south", "south_east", "south_west"]
+OPPOSITE_DIRECTIONS = {
+    "north"      : "south",
+    "east"       : "west",
+    "south"      : "north",
+    "west"       : "east",
+    "north_east" : "south_west",
+    "south_west" : "north_east",
+    "north_west" : "south_east",
+    "south_east" : "north_west"
+}
 
 def header():
     return "version: '3.7'\n\nservices:\n"
@@ -55,6 +65,7 @@ def build_constants(n, trainer_emojis = TRAINER_EMOJIS, pokemon_emojis = POKEMON
     out += f"POKEMON_EMOJIS = '{pokemon_emojis}'\n"
     out += "POKEMON_EMOJIS = [emoji for emoji in POKEMON_EMOJIS]\n"
     out += f"DIRECTIONS = {DIRECTIONS}\n\n"
+    out += f"OPPOSITE_DIRECTIONS = {OPPOSITE_DIRECTIONS}\n\n"
     out += "PORT = 50051\n"
     out += f"GRID_SIZE = {n}"
 
