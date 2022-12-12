@@ -40,8 +40,14 @@ class Client:
             self.join()
     
     def get_lock(self):
-        response = self.stub.lock(pokemon_pb2.Name(name = self.name))
-        self.lock = response.success
+        try:
+            response = self.stub.lock(pokemon_pb2.Name(name = self.name))
+            self.lock = response.success
+        except grp.RpcError as e:
+            if e.code() == grpc.StatusCode.UNAVAILABLE:
+                self.get_lock()
+            else:
+                print(e)
     
     def captured(self):
         if "pokemon" in self.name:
