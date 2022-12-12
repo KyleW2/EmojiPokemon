@@ -5,14 +5,17 @@ Week 1
   
 Week 2
 - [x] Implment telling players the board
-- [ ] Implment players moving
-  - [ ] Record player's paths
+- [x] Implment players moving
+  - [x] Record player's paths
   
 Week 3-4
-- [ ] Implment trainers capturing pokemon
-  - [ ] Give trainers a pokedex
-- [ ] Tell pokemon they're captured
-- [ ] Shutdown trainers when all mons are captured
+- [x] Implment trainers capturing pokemon
+  - [x] Give trainers a pokedex
+- [x] Tell pokemon they're captured
+- [x] Shutdown trainers when all mons are captured
+
+Final tasks
+- [ ] Successfully scale from 4 total players to 46.
 
 ## Emoji Chooser
 Each client (either Trainer or Pokemon) will call the server's join method, sending their hostname (trainerN or pokemonN) and recieving a unique emoji back from the server. Once a player joins the game, the server assigns the player a space and updates two hashmaps: player_to_space and space_to_players. The board state is stored in the space_to_players hashmap which maps each possible spot to a list of players currently in that spot.
