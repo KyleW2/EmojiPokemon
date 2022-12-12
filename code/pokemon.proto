@@ -33,12 +33,12 @@ message Result {
 }
 
 message Neighbors {
-  optional string north = 1;
-  optional string north_east = 2;
-  optional string east = 3;
-  optional string south_east = 4;
-  optional string south = 5;
-  optional string south_west = 6;
-  optional string west = 7;
-  optional string north_west = 8;
+  repeated Name north = 1;
+  repeated Name north_east = 2;
+  repeated Name east = 3;
+  repeated Name south_east = 4;
+  repeated Name south = 5;
+  repeated Name south_west = 6;
+  repeated Name west = 7;
+  repeated Name north_west = 8;
 }
