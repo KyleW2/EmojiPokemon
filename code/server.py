@@ -9,6 +9,9 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # A dictionary mapping player names to their emoji
         self.players = {}
 
+        # Count of pokemon in the game
+        self.pokemon_count = 0
+
         # A list of player names that have been captured
         self.captured = []
 
@@ -35,6 +38,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         if "trainer" in name.name:
             emoji = self.available_trainers.pop()
         elif "pokemon" in name.name:
+            self.pokemon_count += 1
             emoji = self.available_pokemon.pop()
         else:
             print("stranger danger")
@@ -75,11 +79,8 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
                 # Set that pokemon as captured
                 self.captured.append(player)
 
-                # Remove pokemon from player
-                del self.players[player]
-
                 # If all pokemon have been captured
-                if self.all_pokemon_have_been_captured():
+                if len(self.captured) == self.pokemon_count:
                     # Set all player (just the trainers left) as captured
                     for player in self.players.keys():
                         self.captured.append(player)
@@ -90,13 +91,6 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         
         # Otherwise return empty
         return pokemon_pb2.Emoji(emoji = "")
-    
-    def all_pokemon_have_been_captured(self):
-        for player in self.players.keys():
-            if "pokemon" in player:
-                return False
-        
-        return True
     
     # Calls itself until a free space is found for player
     def spawn_player(self, name):
