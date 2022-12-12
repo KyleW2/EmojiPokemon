@@ -43,7 +43,7 @@ class Client:
         try:
             response = self.stub.lock(pokemon_pb2.Name(name = self.name))
             self.lock = response.success
-        except grp.RpcError as e:
+        except grpc.RpcError as e:
             if e.code() == grpc.StatusCode.UNAVAILABLE:
                 self.get_lock()
             else:
