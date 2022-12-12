@@ -57,7 +57,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         return pokemon_pb2.Lock(success = False)
     
     # Calls itself until a free space is found for player
-    def spawn_player(self, name):
+    def spawn_player(self, name, context):
         print(f"Spawning player {name.name}")
         i = random.randint(0, game_constants.GRID_SIZE)
         j = random.randint(0, game_constants.GRID_SIZE)
