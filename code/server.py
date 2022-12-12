@@ -117,6 +117,10 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # Release the lock
         self.who_has_lock = ""
 
+        # Check if they're captured
+        if move.name in self.captured:
+            return pokemon_pb2.Result(success = False, captured = True)
+
         # Remove player from space_to_player
         old_location = self.player_to_space[move.name]
         x, y = self.player_to_space[move.name]
