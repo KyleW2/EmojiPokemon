@@ -71,14 +71,14 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         x, y = self.player_to_space[name.name]
 
         return pokemon_pb2.Neighbors(
-            north = self.space_to_players[(x, y - 1)] if y - 1 > 0 else [],
-            north_east = self.space_to_players[(x + 1, y - 1)] if y - 1 > 0 and x + 1 < game_constants.GRID_SIZE else [],
-            east = self.space_to_players[(x + 1, y)] if x + 1 < game_constants.GRID_SIZE else [],
-            south_east = self.space_to_players[(x + 1, y + 1)] if x + 1 < game_constants.GRID_SIZE and y + 1 < game_constants.GRID_SIZE else [],
-            south = self.space_to_players[(x, y + 1)] if y + 1 < game_constants.GRID_SIZE else [],
-            south_west = self.space_to_players[(x - 1, y + 1)] if x - 1 > 0 and y + 1 < game_constants.GRID_SIZE else [],
-            west = self.space_to_players[(x - 1, y)] if x - 1 > 0 else [],
-            north_west = self.space_to_players[(x - 1, y - 1)] if x - 1 > 0 and y - 1 > 0 else []
+            north = self.space_to_players[(x, y - 1)][0] if y - 1 > 0 else "",
+            north_east = self.space_to_players[(x + 1, y - 1)][0] if y - 1 > 0 and x + 1 < game_constants.GRID_SIZE else "",
+            east = self.space_to_players[(x + 1, y)][0] if x + 1 < game_constants.GRID_SIZE else "",
+            south_east = self.space_to_players[(x + 1, y + 1)][0] if x + 1 < game_constants.GRID_SIZE and y + 1 < game_constants.GRID_SIZE else "",
+            south = self.space_to_players[(x, y + 1)][0] if y + 1 < game_constants.GRID_SIZE else "",
+            south_west = self.space_to_players[(x - 1, y + 1)][0] if x - 1 > 0 and y + 1 < game_constants.GRID_SIZE else "",
+            west = self.space_to_players[(x - 1, y)][0] if x - 1 > 0 else "",
+            north_west = self.space_to_players[(x - 1, y - 1)][0] if x - 1 > 0 and y - 1 > 0 else ""
         )
     
     def move(self, move, context):
