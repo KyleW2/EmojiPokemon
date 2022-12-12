@@ -76,7 +76,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
                 self.captured.append(player)
 
                 # Remove pokemon from player
-                self.players.remove(player)
+                del self.players[player]
 
                 # If all pokemon have been captured
                 if self.all_pokemon_have_been_captured():
