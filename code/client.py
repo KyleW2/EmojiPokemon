@@ -71,12 +71,12 @@ class Client:
             for player in players:
                 # If we are a pokemon
                 if "pokemon" in self.name:
-                    if "trainer" in player:
+                    if "trainer" in player.name:
                         # Move away from trainers
                         return game_constants.OPPOSITE_DIRECTION[space]
                 # If we are a trainer
                 else:
-                    if "pokemon" in player:
+                    if "pokemon" in player.name:
                         # Move towards pokemon
                         return space
         
