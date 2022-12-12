@@ -31,6 +31,7 @@ class Client:
             self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
 
             response = self.stub.join(pokemon_pb2.Name(name = self.name))
+            self.emoji = response.emoji
 
             print(f"I am {response.emoji}")
         except Exception as e:
@@ -48,8 +49,17 @@ class Client:
         else:
             print(f"I collected {self.pokedex}")
 
+        self.save_log()
         self.channel.close()
         self.stop()
+
+    def save_log(self):
+        log = open(f"~/cs4113fa22-proj/logs/{self.name}.txt", "w")
+        log.write(f"I had the emoji {self.emoji}\n")
+        log.write(f"My path was {self.path}\n")
+
+        if "trainer" in self.name:
+            log.write(f"I captured {self.pokedex}\n")
 
     def stop(self):
         signal.signal(signal.SIGTERM, interrupt)
