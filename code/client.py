@@ -46,12 +46,28 @@ class Client:
     def stop(self):
         signal.signal(signal.SIGTERM, interrupt)
     
+    def get_neighbors(self):
+        response = self.stub.get_neighbors(pokemon_pb2.Name(name = self.name))
+
+        neighbors = {
+            "north"      : response.north,
+            "east"       : response.east,
+            "south"      : response.south,
+            "west"       : response.west,
+            "north_east" : response.north_east,
+            "south_west" : response.south_west,
+            "north_west" : response.north_west,
+            "south_east" : response.south_east,
+        }
+
+        return neighbors
+    
     def get_direction(self):
         # Get neighbors
-        neighbors = self.stub.get_neighbors(pokemon_pb2.Name(name = self.name))
+        neighbors = self.get_neighbors()
 
         # Iterate over space -> players dictionary
-        for space, players in vars(neighbors).items():
+        for space, players in neighbors.items():
             for player in players:
                 # If we are a pokemon
                 if "pokemon" in self.name:
