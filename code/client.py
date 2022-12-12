@@ -49,9 +49,16 @@ class Client:
         else:
             print(f"I collected {self.pokedex}")
 
-        self.save_log()
+        self.print_log()
         self.channel.close()
         self.stop()
+
+    def print_log(self):
+        print(f"I had the emoji {self.emoji}")
+        print(f"My path was {self.path}")
+
+        if "trainer" in self.name:
+            print(f"I captured {self.pokedex}")
 
     def save_log(self):
         log = open(f"/home/kypper50/cs4113fa22-proj/logs/{self.name}.txt", "w")
