@@ -69,14 +69,21 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # Get capturing player's location
         location = self.player_to_space[name.name]
 
-        print(f"Trainer {name.name} wants to capture at space containing {self.space_to_players[location]}")
-
         # If there is a pokemon -> return that mon's emoji
         for player in self.space_to_players[location]:
             if "pokemon" in player:
-                print(f"Pokemon {player} is being captured by {name.name}")
                 # Set that pokemon as captured
                 self.captured.append(player)
+
+                # Remove pokemon from player
+                self.players.remove(player)
+
+                # If all pokemon have been captured
+                if not "pokemon" in self.players.keys():
+                    # Set all player (just the trainers left) to be captured
+                    for player in self.players.keys():
+                        self.captured.append(player)
+
                 # Remove mon from grid
                 self.space_to_players[self.player_to_space[player]].remove(player)
                 return pokemon_pb2.Emoji(emoji = self.players[player])

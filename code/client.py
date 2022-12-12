@@ -43,7 +43,11 @@ class Client:
         self.lock = response.success
     
     def captured(self):
-        print("I've been captured!!!")
+        if "pokemon" in self.name:
+            print("I've been captured!!!")
+        else:
+            print(f"I collected {self.pokedex}")
+
         self.channel.close()
         self.stop()
 
