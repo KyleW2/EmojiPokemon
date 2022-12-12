@@ -45,6 +45,8 @@ class Client:
             self.lock = response.success
         except grpc.RpcError as e:
             if e.code() == grpc.StatusCode.UNAVAILABLE:
+                self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
+                self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
                 self.get_lock()
             else:
                 print(e)
