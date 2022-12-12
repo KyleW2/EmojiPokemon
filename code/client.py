@@ -42,6 +42,7 @@ class Client:
         self.lock = response.success
     
     def captured(self):
+        print("I've been captured!!!")
         self.channel.close()
         self.stop()
 
@@ -107,7 +108,7 @@ class Client:
                         self.pokedex.append(response.emoji)
                     
                     self.try_to_capture = False
-                    
+
                 # Otherwise, move spaces
                 else:
                     # Find direction to move towards pokemon
