@@ -44,7 +44,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         self.players[name.name] = emoji
 
         # Spawn player on board
-        self.spawnPlayer(name.name)
+        self.spawn_player(name.name)
         
         self.printBoard()
 
@@ -62,7 +62,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # Get capturing player's location
         location = self.player_to_space[name.name]
 
-        print(f"Trainer {name.name} wants to capture")
+        print(f"Trainer {name.name} wants to capture at space containing {self.space_to_players[location]}")
 
         # If there is a pokemon -> return that mon's emoji
         for player in self.space_to_players[location]:
@@ -78,7 +78,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         return pokemon_pb2.Emoji(emoji = "")
     
     # Calls itself until a free space is found for player
-    def spawnPlayer(self, name):
+    def spawn_player(self, name):
         i = random.randint(0, game_constants.GRID_SIZE)
         j = random.randint(0, game_constants.GRID_SIZE)
 
@@ -86,7 +86,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             self.space_to_players[(i, j)].append(name)
             self.player_to_space[name] = (i, j)
         else:
-            return self.spawnPlayer(name)
+            return self.spawn_player(name)
     
     def get_neighbors(self, name, context):
         x, y = self.player_to_space[name.name]
