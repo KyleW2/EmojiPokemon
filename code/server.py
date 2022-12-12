@@ -26,7 +26,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         self.space_to_players = {}
         for i in range(0, game_constants.GRID_SIZE):
             for j in range(0, game_constants.GRID_SIZE):
-                self.space_to_players[(i, j)] = [""]
+                self.space_to_players[(i, j)] = []
 
     def join(self, name, context):
         # Get correct emoji for trainer or pokemon
@@ -42,7 +42,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         self.players[name.name] = emoji
 
         # Spawn player on board
-        self.spawn_player(name.name)
+        self.spawnPlayer(name.name)
         
         self.printBoard()
 
@@ -57,31 +57,28 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         return pokemon_pb2.Lock(success = False)
     
     # Calls itself until a free space is found for player
-    def spawn_player(self, name):
-        print(f"Spawning player {name}")
+    def spawnPlayer(self, name):
         i = random.randint(0, game_constants.GRID_SIZE)
         j = random.randint(0, game_constants.GRID_SIZE)
 
-        print(f"Dictionary is {self.space_to_players[(i, j)]}")
-
-        if self.space_to_players[(i, j)] == [""]:
+        if self.space_to_players[(i, j)] == []:
             self.space_to_players[(i, j)].append(name)
             self.player_to_space[name] = (i, j)
         else:
-            return self.spawn_player(name)
-
+            return self.spawnPlayer(name)
+    
     def get_neighbors(self, name, context):
         x, y = self.player_to_space[name.name]
 
         return pokemon_pb2.Neighbors(
-            north = self.space_to_players[(x, y - 1)][0] if y - 1 > 0 else "",
-            north_east = self.space_to_players[(x + 1, y - 1)][0] if y - 1 > 0 and x + 1 < game_constants.GRID_SIZE else "",
-            east = self.space_to_players[(x + 1, y)][0] if x + 1 < game_constants.GRID_SIZE else "",
-            south_east = self.space_to_players[(x + 1, y + 1)][0] if x + 1 < game_constants.GRID_SIZE and y + 1 < game_constants.GRID_SIZE else "",
-            south = self.space_to_players[(x, y + 1)][0] if y + 1 < game_constants.GRID_SIZE else "",
-            south_west = self.space_to_players[(x - 1, y + 1)][0] if x - 1 > 0 and y + 1 < game_constants.GRID_SIZE else "",
-            west = self.space_to_players[(x - 1, y)][0] if x - 1 > 0 else "",
-            north_west = self.space_to_players[(x - 1, y - 1)][0] if x - 1 > 0 and y - 1 > 0 else ""
+            north = self.space_to_players[(x, y - 1)] if y - 1 > 0 else [],
+            north_east = self.space_to_players[(x + 1, y - 1)] if y - 1 > 0 and x + 1 < game_constants.GRID_SIZE else [],
+            east = self.space_to_players[(x + 1, y)] if x + 1 < game_constants.GRID_SIZE else [],
+            south_east = self.space_to_players[(x + 1, y + 1)] if x + 1 < game_constants.GRID_SIZE and y + 1 < game_constants.GRID_SIZE else [],
+            south = self.space_to_players[(x, y + 1)] if y + 1 < game_constants.GRID_SIZE else [],
+            south_west = self.space_to_players[(x - 1, y + 1)] if x - 1 > 0 and y + 1 < game_constants.GRID_SIZE else [],
+            west = self.space_to_players[(x - 1, y)] if x - 1 > 0 else [],
+            north_west = self.space_to_players[(x - 1, y - 1)] if x - 1 > 0 and y - 1 > 0 else []
         )
     
     def move(self, move, context):
@@ -137,7 +134,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         for i in range(0, game_constants.GRID_SIZE):
             for j in range(0, game_constants.GRID_SIZE):
                 # If empty print " "
-                if self.space_to_players[(i, j)] == [""]:
+                if self.space_to_players[(i, j)] == []:
                     print("⬛ ", end = "")
                 # If occupied print players emoji
                 else:

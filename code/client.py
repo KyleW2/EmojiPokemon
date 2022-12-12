@@ -51,17 +51,18 @@ class Client:
         neighbors = self.stub.get_neighbors(pokemon_pb2.Name(name = self.name))
 
         # Iterate over space -> players dictionary
-        for space, player in vars(neighbors).items():
-            # If we are a pokemon
-            if "pokemon" in self.name:
-                if "trainer" in player:
-                    # Move away from trainers
-                    return game_constants.OPPOSITE_DIRECTION[space]
-            # If we are a trainer
-            else:
-                if "pokemon" in player:
-                    # Move towards pokemon
-                    return space
+        for space, players in vars(neighbors).items():
+            for player in players:
+                # If we are a pokemon
+                if "pokemon" in self.name:
+                    if "trainer" in player:
+                        # Move away from trainers
+                        return game_constants.OPPOSITE_DIRECTION[space]
+                # If we are a trainer
+                else:
+                    if "pokemon" in player:
+                        # Move towards pokemon
+                        return space
         
         # If no ones around us :'(
         return game_constants.DIRECTIONS[random.randint(0, 7)]
