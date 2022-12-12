@@ -10,6 +10,7 @@ class Client:
         self.is_captured = False
         self.direction = []
         self.pokedex = []
+        self.try_to_capture = False
     
     def play(self) -> None:
         # Join the game
