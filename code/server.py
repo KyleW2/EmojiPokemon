@@ -79,8 +79,8 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
                 self.players.remove(player)
 
                 # If all pokemon have been captured
-                if not "pokemon" in self.players.keys():
-                    # Set all player (just the trainers left) to be captured
+                if self.all_pokemon_have_been_captured():
+                    # Set all player (just the trainers left) as captured
                     for player in self.players.keys():
                         self.captured.append(player)
 
@@ -90,6 +90,13 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         
         # Otherwise return empty
         return pokemon_pb2.Emoji(emoji = "")
+    
+    def all_pokemon_have_been_captured(self):
+        for player in self.players.keys():
+            if "pokemon" in player:
+                return False
+        
+        return True
     
     # Calls itself until a free space is found for player
     def spawn_player(self, name):
