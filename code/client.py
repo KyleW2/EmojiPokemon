@@ -8,7 +8,7 @@ class Client:
         self.name = name
         self.lock = False
         self.is_captured = False
-        self.direction = []
+        self.path = []
         self.pokedex = []
         self.try_to_capture = False
     
