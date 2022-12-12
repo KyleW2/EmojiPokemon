@@ -61,7 +61,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         i = random.randint(0, game_constants.GRID_SIZE)
         j = random.randint(0, game_constants.GRID_SIZE)
 
-        if self.space_to_players[(i, j)] == []:
+        if self.space_to_players[(i, j)] == [""]:
             self.space_to_players[(i, j)].append(name)
             self.player_to_space[name] = (i, j)
         else:
