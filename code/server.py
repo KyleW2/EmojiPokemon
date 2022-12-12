@@ -66,7 +66,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             self.space_to_players[(i, j)].append(name)
             self.player_to_space[name] = (i, j)
         else:
-            return self.spawn_player(name)
+            return self.spawn_player(name, context)
 
     def get_neighbors(self, name, context):
         x, y = self.player_to_space[name.name]
