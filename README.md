@@ -30,10 +30,11 @@ Currently, the protocol buffer in `code/pokemon.proto` defines join, get_neighbo
 ## Interfaces
 | Functions | Purpose | In | Out | Plan to Test |  
 | --- | --- | --- | --- | --- |  
-| join | Allows clients to join the game and be assigned an emoji | Client name | Emoji | This is tested by clients printing out their given emoji and comparing it to the servers printed board | 
-| get_neighbors | Returns the spaces around the player | Client name | A list of what each space contains | This is testable by comparing the servers response to the servers board (printing what the client gets vs board print out) |  
-| move | Moves a player in their desired direction | Client name, cardinal direction | Boolean if move was successfull, boolean if client is captured or not (pokemon only) | This is testable by allows the clients to move and ensuring they shut down on capture |   
-| capture |	Allows trainers to try and capture pokemon in the same spot | Client name | Emoji of pokemon if one was captured | This is testable by having the client print their captured pokemon and comparing it to the emoji of the capture pokemon container |
+| join | Allows clients to join the game and be assigned an emoji | Client name | Emoji | This was tested by clients printing out their given emoji and comparing it to the servers printed board | 
+| get_neighbors | Returns the spaces around the player | Client name | A list of what each space contains | This was tested by comparing the servers message to clients to the servers board (printing what the client gets vs server prints out) |  
+| move | Moves a player in their desired direction | Client name, cardinal direction | Boolean if move was successfull, boolean if client is captured or not (pokemon only) | This was tested first by having pokemon move randomly, then by habing them move away from trainers |   
+| capture |	Allows trainers to try and capture pokemon in the same spot | Client name | Emoji of pokemon if one was captured | This was tested by running the game and verifying that pokemon were succesfuly removed from the board and told to shut down |
+| lock | Allows players to request the lock to make writes, such as moving or capturing | Client name | A boolean if the lock was obtained | This was tested along side move |
 
 ## Start up logging
 ![](media/startup_logging.gif)  
