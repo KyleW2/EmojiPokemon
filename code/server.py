@@ -59,6 +59,13 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         return pokemon_pb2.Lock(success = False)
 
     def capture(self, name, context):
+        # Make sure they're holding the lock
+        if name.name != self.who_has_lock:
+            return pokemon_pb2.Emoji(emoji = "")
+        
+        # Release the lock
+        self.who_has_lock = ""
+
         # Get capturing player's location
         location = self.player_to_space[name.name]
 
