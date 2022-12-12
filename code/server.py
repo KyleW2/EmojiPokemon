@@ -62,9 +62,12 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # Get capturing player's location
         location = self.player_to_space[name.name]
 
+        print(f"Trainer {name.name} wants to capture")
+
         # If there is a pokemon -> return that mon's emoji
         for player in self.space_to_players[location]:
             if "pokemon" in player:
+                print(f"Pokemon {player} is being captured by {name.name}")
                 # Set that pokemon as captured
                 self.captured.append(player)
                 # Remove mon from grid
