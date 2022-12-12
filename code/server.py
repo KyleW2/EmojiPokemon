@@ -83,8 +83,8 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
                 if len(self.captured) == self.pokemon_count:
                     print("All pokemon have been captured! Game over.")
                     # Set all player (just the trainers left) as captured
-                    for player in self.players.keys():
-                        self.captured.append(player)
+                    for trainer in self.players.keys():
+                        self.captured.append(trainer)
 
                 # Remove mon from grid
                 self.space_to_players[self.player_to_space[player]].remove(player)
