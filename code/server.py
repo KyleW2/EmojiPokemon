@@ -157,6 +157,15 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
 
         # Set location to new one if possible
         if new_location[0] < game_constants.GRID_SIZE and new_location[0] > 0 and new_location[1] < game_constants.GRID_SIZE and new_location[1] > 0:
+            # Make sure trainer isn't already in the spot
+            if "trainer" in move.name:
+                for player in self.space_to_players[new_location]:
+                    if "trainer" in player:
+                        # Add trainer back to spot and return false
+                        self.space_to_players[old_location].append(move.name)
+                        return pokemon_pb2.Result(success = False, captured = move.name in self.captured)
+            
+            # If not -> move player
             self.space_to_players[new_location].append(move.name)
             self.player_to_space[move.name] = new_location
 
