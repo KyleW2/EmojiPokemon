@@ -54,7 +54,7 @@ class Client:
         self.stop()
 
     def save_log(self):
-        log = open(f"~/cs4113fa22-proj/logs/{self.name}.txt", "w")
+        log = open(f"~/cs4113fa22-proj/logs/{self.name}.txt", "x")
         log.write(f"I had the emoji {self.emoji}\n")
         log.write(f"My path was {self.path}\n")
 
