@@ -65,7 +65,10 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # If there is a pokemon -> return that mon's emoji
         for player in self.space_to_players[location]:
             if "pokemon" in player:
+                # Set that pokemon as captured
                 self.captured.append(player)
+                # Remove mon from grid
+                self.space_to_players[self.player_to_space[player]].remove(player)
                 return pokemon_pb2.Emoji(emoji = self.players[player])
         
         # Otherwise return empty
