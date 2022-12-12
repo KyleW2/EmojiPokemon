@@ -62,6 +62,8 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         i = random.randint(0, game_constants.GRID_SIZE)
         j = random.randint(0, game_constants.GRID_SIZE)
 
+        print(f"Dictionary is {self.space_to_players[(i, j)]}")
+
         if self.space_to_players[(i, j)] == [""]:
             self.space_to_players[(i, j)].append(name)
             self.player_to_space[name] = (i, j)
@@ -135,7 +137,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         for i in range(0, game_constants.GRID_SIZE):
             for j in range(0, game_constants.GRID_SIZE):
                 # If empty print " "
-                if self.space_to_players[(i, j)] == []:
+                if self.space_to_players[(i, j)] == [""]:
                     print("⬛ ", end = "")
                 # If occupied print players emoji
                 else:
