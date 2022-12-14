@@ -23,31 +23,6 @@ class Client:
             self.pokemon()
         else:
             print("😳")
-
-    def stub_caller(self, function, attempt = 0, direction = None):
-        try:
-            if function == "lock":
-                return self.stub.lock(pokemon_pb2.Name(name = self.name))
-            elif function == "move":
-                return self.stub.move(pokemon_pb2.Move(name = self.name, direction = direction))
-            elif function == "capture":
-                return self.stub.capture(pokemon_pb2.Name(name = self.name))
-            elif function == "get_neighbor":
-                return self.stub.get_neighbors(pokemon_pb2.Name(name = self.name))
-        except Exception as e:
-            # Remake channel
-            if e.code() == grpc.StatusCode.UNAVAILABLE:
-                # If max attempts then throw error
-                if attempt > game_constants.MAX_ATTEMPTS:
-                    print("Max attempts reached while calling stub.")
-                    print(e)
-                    return
-
-                self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
-                self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
-                return self.stub_caller(function, attempt + 1, direction)
-            else:
-                print(e)
     
     def join(self) -> None:
         try:
@@ -65,8 +40,16 @@ class Client:
             self.join()
     
     def get_lock(self):
-        response = self.stub_caller("lock")
-        self.lock = response.success
+        try:
+            response = self.stub.lock(pokemon_pb2.Name(name = self.name))
+            self.lock = response.success
+        except grpc.RpcError as e:
+            if e.code() == grpc.StatusCode.UNAVAILABLE:
+                self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
+                self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
+                self.get_lock()
+            else:
+                print(e)
     
     def captured(self):
         if "pokemon" in self.name:
@@ -94,7 +77,16 @@ class Client:
         signal.signal(signal.SIGTERM, interrupt)
     
     def get_neighbors(self):
-        response = self.stub_caller("get_neighbors")
+        try:
+            response = self.stub.get_neighbors(pokemon_pb2.Name(name = self.name))
+        except grpc.RpcError as e:
+            if e.code() == grpc.StatusCode.UNAVAILABLE:
+                self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
+                self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
+                self.get_neighbors()
+            else:
+                print(e)
+
 
         neighbors = {
             "north"      : response.north,
@@ -145,7 +137,7 @@ class Client:
                 # If we think were on a pokemon
                 if self.try_to_capture:
                     # Capture
-                    response = self.stub_caller("capture")
+                    response = self.stub.capture(pokemon_pb2.Name(name = self.name))
 
                     # If capture was successful, add pokemon to pokedex
                     for pokemon in response.emojis:
@@ -157,7 +149,7 @@ class Client:
                 else:
                     # Find direction to move towards pokemon
                     direction = self.get_direction()
-                    response = self.stub_caller("move", direction = direction)
+                    response = self.stub.move(pokemon_pb2.Move(name = self.name, direction = direction))
 
                     # Record movement if it went through
                     if response.success:
@@ -180,7 +172,7 @@ class Client:
             if self.lock:
                 # Find direction to move away from trainer
                 direction = self.get_direction()
-                response = self.stub_caller("move", direction = direction)
+                response = self.stub.move(pokemon_pb2.Move(name = self.name, direction = direction))
 
                 # Set the lock to false
                 self.lock = False
@@ -201,7 +193,3 @@ def start(name):
     client = Client(name)
     client.play()
     client.stop()
-
-
-
-    
