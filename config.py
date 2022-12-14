@@ -69,6 +69,7 @@ def build_constants(n, trainer_emojis = TRAINER_EMOJIS, pokemon_emojis = POKEMON
     out += f"PRINT_LOCK = False\n"
     out += f"PRINT_BOARD = False\n"
     out += f"PRINT_MOVE = False\n\n"
+    out += f"MAX_ATTEMPTS = 5\n\n"
     out += "PORT = 50051\n"
     out += f"GRID_SIZE = {n}"
 
