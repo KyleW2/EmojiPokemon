@@ -1,12 +1,14 @@
 from concurrent import futures
 import signal
+import threading
 import pokemon_pb2, pokemon_pb2_grpc
 import game_constants
 import random
 import grpc
 
 class Pokemon(pokemon_pb2_grpc.PokemonServicer):
-    def __init__(self):
+    def __init__(self, stop_event):
+        self.stop_event = stop_event
         # A dictionary mapping player names to their emoji
         self.players = {}
 
@@ -131,6 +133,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
 
         if len(self.left) == len(self.players.keys()):
             print("All players have left, goodbye!")
+            self.stop_event.set()
         
         return pokemon_pb2.Emoji(emoji = "👋")
     
@@ -209,9 +212,13 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             print()
 
 def start():
+    stop_event = threading.Event()
     server = grpc.server(futures.ThreadPoolExecutor(max_workers = 32))
-    pokemon_pb2_grpc.add_PokemonServicer_to_server(Pokemon(), server)
+    pokemon_pb2_grpc.add_PokemonServicer_to_server(Pokemon(stop_event), server)
     server.add_insecure_port(f"[::]:{game_constants.PORT}")
     server.start()
+
     print(f"Listening on port {game_constants.PORT}")
-    server.wait_for_termination(30)
+
+    stop_event.wait()
+    server.stop()
