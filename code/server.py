@@ -1,4 +1,5 @@
 from concurrent import futures
+import signal
 import pokemon_pb2, pokemon_pb2_grpc
 import game_constants
 import random
@@ -123,6 +124,15 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             north_west = [pokemon_pb2.Name(name = p) for p in self.space_to_players[(x - 1, y - 1)]] if x - 1 > 0 and y - 1 > 0 else []
         )
     
+    def quit(self, name, context):
+        self.left.append(name)
+
+        if len(self.left) == len(self.players.keys()):
+            print("All players have left, goodbye!")
+            self.stop()
+        
+        return pokemon_pb2.Emoji(emoji = "👋")
+    
     def move(self, move, context):
         # Make sure they're holding the lock
         if move.name != self.who_has_lock:
@@ -196,11 +206,17 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
                 else:
                     print(self.players[self.space_to_players[(i, j)][0]] + " ", end = "")
             print()
+    
+    def stop(self):
+        signal.signal(signal.SIGTERM, interrupt)
+
+def interrupt():
+    raise KeyboardInterrupt()
 
 def start():
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers = 1))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers = 32))
     pokemon_pb2_grpc.add_PokemonServicer_to_server(Pokemon(), server)
     server.add_insecure_port(f"[::]:{game_constants.PORT}")
     server.start()
     print(f"Listening on port {game_constants.PORT}")
-    server.wait_for_termination(10)
+    server.wait_for_termination()

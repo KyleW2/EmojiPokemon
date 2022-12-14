@@ -8,6 +8,7 @@ service Pokemon {
   rpc get_neighbors (Name) returns (Neighbors) {}
   rpc move (Move) returns (Result) {}
   rpc capture (Name) returns (Emojis) {}
+  rpc left (Name) returns (Emoji) {}
 }
 
 message Name {
