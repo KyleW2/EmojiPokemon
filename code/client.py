@@ -35,17 +35,19 @@ class Client:
             elif function == "get_neighbor":
                 return self.stub.get_neighbors(pokemon_pb2.Name(name = self.name))
         except Exception as e:
-            # If max attempts then throw error
-            if attempt > game_constants.MAX_ATTEMPTS:
-                print("Max attempts reached while calling stub.")
-                print(e)
-                return
-
             # Remake channel
             if e.code() == grpc.StatusCode.UNAVAILABLE:
+                # If max attempts then throw error
+                if attempt > game_constants.MAX_ATTEMPTS:
+                    print("Max attempts reached while calling stub.")
+                    print(e)
+                    return
+
                 self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
                 self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
                 return self.stub_caller(function, attempt + 1, direction)
+            else:
+                print(e)
     
     def join(self) -> None:
         try:
