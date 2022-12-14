@@ -10,6 +10,8 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # A dictionary mapping player names to their emoji
         self.players = {}
 
+        self.left = []
+
         # Count of pokemon in the game
         self.pokemon_count = 0
 
