@@ -79,7 +79,16 @@ class Client:
         signal.signal(signal.SIGTERM, interrupt)
     
     def get_neighbors(self):
-        response = self.stub.get_neighbors(pokemon_pb2.Name(name = self.name))
+        try:
+            response = self.stub.get_neighbors(pokemon_pb2.Name(name = self.name))
+        except grpc.RpcError as e:
+            if e.code() == grpc.StatusCode.UNAVAILABLE:
+                self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
+                self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
+                self.get_neighbors()
+            else:
+                print(e)
+
 
         neighbors = {
             "north"      : response.north,
