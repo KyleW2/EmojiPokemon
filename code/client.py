@@ -23,6 +23,30 @@ class Client:
             self.pokemon()
         else:
             print("😳")
+
+    def stub_caller(self, function, attempt = 0, direction = None):
+        try:
+            if function == "lock":
+                return self.stub.lock(pokemon_pb2.Name(name = self.name))
+            elif function == "move":
+                return self.stub.move(pokemon_pb2.Move(name = self.name, direction = direction))
+            elif function == "capture":
+                return self.stub.capture(pokemon_pb2.Name(name = self.name))
+            elif function == "get_neighbor":
+                return self.stub.get_neighbors(pokemon_pb2.Name(name = self.name))
+        except Exception as e:
+            # If max attempts then throw error
+            if attempt > game_constants.MAX_ATTEMPTS:
+                print("Max attempts reached while calling stub.")
+                print(e)
+                return
+
+            # Remake channel
+            if e.code() == grpc.StatusCode.UNAVAILABLE:
+                self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
+                self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
+                self.stub_caller(function, attempt + 1, direction)
+
     
     def join(self) -> None:
         try:
@@ -40,16 +64,8 @@ class Client:
             self.join()
     
     def get_lock(self):
-        try:
-            response = self.stub.lock(pokemon_pb2.Name(name = self.name))
-            self.lock = response.success
-        except grpc.RpcError as e:
-            if e.code() == grpc.StatusCode.UNAVAILABLE:
-                self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
-                self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
-                self.get_lock()
-            else:
-                print(e)
+        response = self.stub_caller("lock")
+        self.lock = response.success
     
     def captured(self):
         if "pokemon" in self.name:
@@ -77,16 +93,7 @@ class Client:
         signal.signal(signal.SIGTERM, interrupt)
     
     def get_neighbors(self):
-        try:
-            response = self.stub.get_neighbors(pokemon_pb2.Name(name = self.name))
-        except grpc.RpcError as e:
-            if e.code() == grpc.StatusCode.UNAVAILABLE:
-                self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
-                self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
-                self.get_neighbors()
-            else:
-                print(e)
-
+        response = self.stub_caller("get_neighbors")
 
         neighbors = {
             "north"      : response.north,
@@ -137,7 +144,7 @@ class Client:
                 # If we think were on a pokemon
                 if self.try_to_capture:
                     # Capture
-                    response = self.stub.capture(pokemon_pb2.Name(name = self.name))
+                    response = self.stub_caller("capture")
 
                     # If capture was successful, add pokemon to pokedex
                     for pokemon in response.emojis:
@@ -149,7 +156,7 @@ class Client:
                 else:
                     # Find direction to move towards pokemon
                     direction = self.get_direction()
-                    response = self.stub.move(pokemon_pb2.Move(name = self.name, direction = direction))
+                    response = self.stub_caller("move", direction = direction)
 
                     # Record movement if it went through
                     if response.success:
@@ -172,7 +179,7 @@ class Client:
             if self.lock:
                 # Find direction to move away from trainer
                 direction = self.get_direction()
-                response = self.stub.move(pokemon_pb2.Move(name = self.name, direction = direction))
+                response = self.stub_caller("move", direction = direction)
 
                 # Set the lock to false
                 self.lock = False
