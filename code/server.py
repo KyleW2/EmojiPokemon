@@ -221,4 +221,4 @@ def start():
     print(f"Listening on port {game_constants.PORT}")
 
     stop_event.wait()
-    server.stop()
+    server.stop(None)
