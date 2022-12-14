@@ -15,7 +15,7 @@ Week 3-4
 - [x] Shutdown trainers when all mons are captured
 
 Final tasks
-- [ ] Successfully scale from 4 total players to 46.
+- [x] Successfully scale from 4 total players to 46.
 
 ## Emoji Chooser
 Each client (either Trainer or Pokemon) will call the server's join method, sending their hostname (trainerN or pokemonN) and recieving a unique emoji back from the server. Once a player joins the game, the server assigns the player a space and updates two hashmaps: player_to_space and space_to_players. The board state is stored in the space_to_players hashmap which maps each possible spot to a list of players currently in that spot.
