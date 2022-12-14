@@ -55,7 +55,7 @@ class Client:
         if "pokemon" in self.name:
             print("I've been captured!!!")
 
-        self.stub.left(pokemon_pb2.Name(name = self.name))
+        self.stub.quit(pokemon_pb2.Name(name = self.name))
         self.print_log()
         self.stop()
 
