@@ -210,6 +210,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
                 else:
                     print(self.players[self.space_to_players[(i, j)][0]] + " ", end = "")
             print()
+        print()
 
 def start():
     stop_event = threading.Event()
