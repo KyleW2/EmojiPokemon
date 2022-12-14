@@ -2,7 +2,7 @@ import sys
 
 TWO = "  "
 FOUR = TWO + TWO
-TRAINER_EMOJIS = '😀😁😂😎😍🤩😴🤐🙄😝🤑😤😨🥶🥵😡🤢🤡🤠'
+TRAINER_EMOJIS = '😀😁😂😎😍🤩😴🤐🙄😝🤑😤😨🥶🥵😡🤢🤡🤠🤔😪🤐🥴'
 POKEMON_EMOJIS = '🐱🐍🐌🐵🐶🐺🦁🐯🦒🦊🦝🐮🐷🐗🐭🐹🐰🐻🐨🐼🐸🦓🐴🦄🐔🐲🐉🦕🐀🦔🐇🐿🦖🦎🐊🐢🐍🐬🐠🐟'
 DIRECTIONS = ["north", "north_east", "north_west", "east", "west", "south", "south_east", "south_west"]
 OPPOSITE_DIRECTIONS = {
