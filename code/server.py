@@ -131,7 +131,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
     def quit(self, name, context):
         self.left.append(name)
 
-        if len(self.left) == len(self.players.keys()):
+        if len(self.left) == game_constants.POKEMON_COUNT + game_constants.TRAINER_COUNT:
             print("All players have left, goodbye!")
             self.stop_event.set()
         

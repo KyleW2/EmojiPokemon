@@ -57,7 +57,7 @@ def build_compose(t, p):
     compose.write(out)
     compose.close()
 
-def build_constants(n, trainer_emojis = TRAINER_EMOJIS, pokemon_emojis = POKEMON_EMOJIS):
+def build_constants(n, t, p, trainer_emojis = TRAINER_EMOJIS, pokemon_emojis = POKEMON_EMOJIS):
     constants = open("code/game_constants.py", "w", encoding = "utf-8")
 
     out = f"TRAINER_EMOJIS = '{trainer_emojis}'\n"
@@ -70,6 +70,8 @@ def build_constants(n, trainer_emojis = TRAINER_EMOJIS, pokemon_emojis = POKEMON
     out += f"PRINT_BOARD = False\n"
     out += f"PRINT_MOVE = False\n\n"
     out += f"MAX_ATTEMPTS = 5\n\n"
+    out += f"POKEMON_COUNT = {p}\n"
+    out += f"TRAINER_COUNT = {t}\n\n"
     out += "PORT = 50051\n"
     out += f"GRID_SIZE = {n}"
 
@@ -87,4 +89,4 @@ if __name__ == "__main__":
     p = int(sys.argv[3])
 
     build_compose(t, p)
-    build_constants(n)
+    build_constants(n, t, p)
