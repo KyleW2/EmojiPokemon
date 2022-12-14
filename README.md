@@ -35,6 +35,7 @@ Currently, the protocol buffer in `code/pokemon.proto` defines join, get_neighbo
 | move | Moves a player in their desired direction | Client name, cardinal direction | Boolean if move was successfull, boolean if client is captured or not (pokemon only) | This was tested first by having pokemon move randomly, then by habing them move away from trainers |   
 | capture |	Allows trainers to try and capture pokemon in the same spot | Client name | Emoji of pokemon if one was captured | This was tested by running the game and verifying that pokemon were succesfuly removed from the board and told to shut down |
 | lock | Allows players to request the lock to make writes, such as moving or capturing | Client name | A boolean if the lock was obtained | This was tested along side move |
+| quit | Used for players to tell the server they've shutdown | Client name | The server waves goodbye 👋 | Have the client print when they terminate and verify the server prints the same client left | 
 
 ## Start up logging
 ![](media/startup_logging.gif)  

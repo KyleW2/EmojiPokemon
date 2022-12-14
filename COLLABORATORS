@@ -1,0 +1,4 @@
+gRPC documentation: https://grpc.github.io/grpc/python/grpc.html
+Specifically the docs used to solve headache #1: https://grpc.github.io/grpc/python/grpc.html?highlight=termination#grpc.Server.wait_for_termination
+Python threading documentation: https://docs.python.org/3/library/threading.html
+Simple guide for thread events: https://superfastpython.com/thread-event-object-in-python/
