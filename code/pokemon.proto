@@ -23,7 +23,7 @@ message Emoji {
 }
 
 message Emojis {
-  repeated string emoji = 1;
+  repeated string emojis = 1;
 }
 
 message Move {

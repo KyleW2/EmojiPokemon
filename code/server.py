@@ -96,7 +96,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
                 self.space_to_players[self.player_to_space[player]].remove(player)
         
         # Otherwise return empty
-        return pokemon_pb2.Emojis(emoji = captured_mons)
+        return pokemon_pb2.Emojis(emojis = captured_mons)
     
     # Calls itself until a free space is found for player
     def spawn_player(self, name):
