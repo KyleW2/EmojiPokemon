@@ -45,8 +45,7 @@ class Client:
             if e.code() == grpc.StatusCode.UNAVAILABLE:
                 self.channel = grpc.insecure_channel(f"server:{game_constants.PORT}")
                 self.stub = pokemon_pb2_grpc.PokemonStub(self.channel)
-                self.stub_caller(function, attempt + 1, direction)
-
+                return self.stub_caller(function, attempt + 1, direction)
     
     def join(self) -> None:
         try:
