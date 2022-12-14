@@ -6,5 +6,9 @@ DIRECTIONS = ['north', 'north_east', 'north_west', 'east', 'west', 'south', 'sou
 
 OPPOSITE_DIRECTIONS = {'north': 'south', 'east': 'west', 'south': 'north', 'west': 'east', 'north_east': 'south_west', 'south_west': 'north_east', 'north_west': 'south_east', 'south_east': 'north_west'}
 
+PRINT_LOCK = False
+PRINT_MOVE = False
+
+
 PORT = 50051
 GRID_SIZE = 10

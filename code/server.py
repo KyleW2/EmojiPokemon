@@ -57,7 +57,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
     def lock(self, name, context):
         if self.who_has_lock == "":
             self.who_has_lock = name.name
-            print(f"Giving the lock to {name.name}")
+            if game_constants.PRINT_LOCK: print(f"Giving the lock to {name.name}")
             return pokemon_pb2.Lock(success = True)
             
         return pokemon_pb2.Lock(success = False)
@@ -158,7 +158,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         elif move.direction == "north_west":
             new_location = (x - 1, y - 1)
 
-        print(f"{move.name} wants to move from {old_location} to {new_location}")
+        if game_constants.PRINT_MOVE: print(f"{move.name} wants to move from {old_location} to {new_location}")
 
         # Set location to new one if possible
         if new_location[0] < game_constants.GRID_SIZE and new_location[0] > 0 and new_location[1] < game_constants.GRID_SIZE and new_location[1] > 0:
