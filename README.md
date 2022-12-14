@@ -44,3 +44,7 @@ First the `make grid_size=8 trainer_count=1 pokemon_count=2 config` command is r
 ## Printing the board
 ![](media/print_board_logging.gif)  
 Each player in the game joins, is assigned a random starting location, and then the server displays the game board.
+
+## A full game of 23 trainers and 23 pokemon
+![](media/full_run.gif)
+Note: some pokemon may occupy the same spot but only 1 emoji shows.
