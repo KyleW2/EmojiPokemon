@@ -131,7 +131,6 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
 
         if len(self.left) == len(self.players.keys()):
             print("All players have left, goodbye!")
-            self.stop()
         
         return pokemon_pb2.Emoji(emoji = "👋")
     
@@ -208,12 +207,6 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
                 else:
                     print(self.players[self.space_to_players[(i, j)][0]] + " ", end = "")
             print()
-    
-    def stop(self):
-        signal.signal(signal.SIGTERM, interrupt)
-
-def interrupt():
-    raise KeyboardInterrupt()
 
 def start():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers = 32))
