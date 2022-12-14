@@ -214,4 +214,4 @@ def start():
     server.add_insecure_port(f"[::]:{game_constants.PORT}")
     server.start()
     print(f"Listening on port {game_constants.PORT}")
-    server.wait_for_termination()
+    server.wait_for_termination(30)
