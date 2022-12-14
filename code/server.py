@@ -126,7 +126,10 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         )
     
     def quit(self, name, context):
-        self.left.append(name)
+        if self.who_has_lock == name.name:
+            self.who_has_lock = ""
+
+        self.left.append(name.name)
 
         if len(self.left) == game_constants.POKEMON_COUNT + game_constants.TRAINER_COUNT:
             print("All players have left, goodbye!")
