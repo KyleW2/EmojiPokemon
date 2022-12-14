@@ -133,8 +133,8 @@ class Client:
                     response = self.stub.capture(pokemon_pb2.Name(name = self.name))
 
                     # If capture was successful, add pokemon to pokedex
-                    if response.emoji != "":
-                        self.pokedex.append(response.emoji)
+                    for pokemon in response.emojis:
+                        self.pokedex.append(pokemon)
                     
                     self.try_to_capture = False
 

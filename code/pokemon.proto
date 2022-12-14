@@ -7,7 +7,7 @@ service Pokemon {
   rpc lock(Name) returns (Lock) {}
   rpc get_neighbors (Name) returns (Neighbors) {}
   rpc move (Move) returns (Result) {}
-  rpc capture (Name) returns (Emoji) {}
+  rpc capture (Name) returns (Emojis) {}
 }
 
 message Name {
@@ -20,6 +20,10 @@ message Lock {
   
 message Emoji {
   optional string emoji = 1;
+}
+
+message Emojis {
+  repeated string emoji = 1;
 }
 
 message Move {

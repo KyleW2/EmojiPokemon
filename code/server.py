@@ -73,11 +73,17 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # Get capturing player's location
         location = self.player_to_space[name.name]
 
+        # Start list of emojis of pokemon captured by trainer
+        captured_mons = []
+
         # If there is a pokemon -> return that mon's emoji
         for player in self.space_to_players[location]:
             if "pokemon" in player:
                 # Set that pokemon as captured
                 self.captured.append(player)
+
+                # Add to list to return to trainer
+                captured_mons.append(self.players[player])
 
                 # If all pokemon have been captured
                 if len(self.captured) == self.pokemon_count:
@@ -88,10 +94,9 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
 
                 # Remove mon from grid
                 self.space_to_players[self.player_to_space[player]].remove(player)
-                return pokemon_pb2.Emoji(emoji = self.players[player])
         
         # Otherwise return empty
-        return pokemon_pb2.Emoji(emoji = "")
+        return pokemon_pb2.Emojis(emoji = captured_mons)
     
     # Calls itself until a free space is found for player
     def spawn_player(self, name):
