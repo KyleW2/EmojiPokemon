@@ -58,7 +58,6 @@ class Client:
             print(f"I captured {self.pokedex}")
 
         self.print_log()
-        self.channel.close()
         self.stop()
 
     def print_log(self):
