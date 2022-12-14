@@ -54,8 +54,6 @@ class Client:
     def captured(self):
         if "pokemon" in self.name:
             print("I've been captured!!!")
-        else:
-            print(f"I captured {self.pokedex}")
 
         self.print_log()
         self.stop()
