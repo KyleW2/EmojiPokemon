@@ -50,7 +50,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         # Spawn player on board
         self.spawn_player(name.name)
         
-        self.print_board()
+        if game_constants.PRINT_BOARD: self.print_board()
 
         return pokemon_pb2.Emoji(emoji = emoji)
     
@@ -175,7 +175,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
             self.space_to_players[new_location].append(move.name)
             self.player_to_space[move.name] = new_location
 
-            self.print_board()
+            if game_constants.PRINT_BOARD: self.print_board()
 
             return pokemon_pb2.Result(success = True, captured = move.name in self.captured)
 
