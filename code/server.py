@@ -90,7 +90,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
 
                 # If all pokemon have been captured
                 if len(self.captured) == self.pokemon_count:
-                    print("All pokemon have been captured! Game over.")
+                    print("All pokemon have been captured!")
                     # Set all player (just the trainers left) as captured
                     for trainer in self.players.keys():
                         self.captured.append(trainer)
@@ -170,7 +170,7 @@ class Pokemon(pokemon_pb2_grpc.PokemonServicer):
         elif move.direction == "north_west":
             new_location = (x - 1, y - 1)
 
-        if game_constants.PRINT_MOVE: print(f"{move.name} wants to move from {old_location} to {new_location}")
+        if game_constants.PRINT_MOVE: print(f"{move.name} wants to move from {old_location} to {new_location}, they are captured: {move.name in self.captured}")
 
         # Set location to new one if possible
         if new_location[0] < game_constants.GRID_SIZE and new_location[0] > 0 and new_location[1] < game_constants.GRID_SIZE and new_location[1] > 0:
